@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>添加员工</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+    <style>
+    .container {
+        width: 400px;
+        height: 400px;
+        margin: 0 auto;
+        margin-top: 150px;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form th:action="@{/emp}" method="post">
+            <div>
+                <input type="hidden" name="id"/>
+                <div class="form-group">
+                    <label>姓名</label>
+                    <input type="text"  name="lastName" class="form-control" placeholder="zhangsan"/>
+                </div>
+                <div class="form-group">
+                    <label>邮箱 </label>
+                    <input type="text" class="form-control" name="email" placeholder="zs@163.com" />
+                </div>
+                <div class="form-group">
+                    <label>性别</label>
+                        <input type="radio" name="gender" value="1" checked="checked"/>
+                        <label>男</label>
+                        <input type="radio" name="gender" value="0"/>
+                        <label>女</label>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label>部门</label>
+                    <select name="did" class="form-control">
+                        <option th:value="${dept.getId()}" th:each="dept:${depts}" th:text="${dept.departmentName}">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>生日</label>
+                    <input type="text" name="birth" class="form-control" placeholder="1997-01-30" />
+                </div>
+                <input class="btn btn-success" type="submit" value="添加"/>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

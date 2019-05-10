@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>员工列表</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+    <style>
+        #tableDiv {
+            margin-top: 50px;
+        }
+        table th {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div id="tableDiv" class="container table-responsive text-center">
+    <a shiro:hasPermission="user:add" class="btn btn-success" th:href="@{/add}"> 添加员工</a>
+    <a class="btn btn-info" th:href="@{/logout}"> 注销</a>
+    <br/>
+    <br/>
+    <table class="table table-striped table-bordered table-hover table-sm">
+        <thead>
+        <tr>
+            <th>编号</th>
+            <th>姓名</th>
+            <th>邮箱</th>
+            <th>性别</th>
+            <th>部门</th>
+            <th>生日</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="emp:${emps}">
+            <td th:text="${emp.id}"></td>
+            <td th:text="${emp.lastName}"></td>
+            <td th:text="${emp.email}"></td>
+            <td th:text="${emp.gender}=='0'?'女':'男'"></td>
+            <td th:each="dept:${depts}" th:if="${dept.id} == ${emp.did}" th:text="${dept.departmentName}"></td>
+            <td th:text="${#dates.format(emp.birth, 'yyyy-MM-dd')}"></td>
+            <td>
+                <a class="btn btn-primary btn-sm" shiro:hasPermission="user:update" th:href="@{/emp/}+${emp.id}">编辑</a>
+                <button shiro:hasPermission="user:delete" type="submit" th:attr="del_uri=@{/emp/}+${emp.id}" class="btn btn-danger btn-sm delBtn">删除</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <form id="deleteEmpForm" method="post" action="">
+        <input type="hidden" name="_method" value="delete"/>
+    </form>
+</div>
+<script type="text/javascript" th:src="@{/js/jquery-1.9.1.min.js}"></script>
+<script>
+    $(".delBtn").click(function () {
+        var flag = confirm("确认删除?");
+        if(flag === true) {
+            $("#deleteEmpForm").attr("action", $(this).attr("del_uri")).submit();
+            return false;
+        }
+    })
+</script>
+</body>
+</html>
